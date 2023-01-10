@@ -1,0 +1,39 @@
+PODS:
+  - BugfenderSDK (1.10.5)
+  - Flutter (1.0.0)
+  - location (0.0.1):
+    - Flutter
+  - xpoint_sdk (0.0.1):
+    - Flutter
+    - XPointSDK (~> 4.0.1)
+  - XPointSDK (4.0.1):
+    - BugfenderSDK (~> 1.10.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - location (from `.symlinks/plugins/location/ios`)
+  - xpoint_sdk (from `.symlinks/plugins/xpoint_sdk/ios`)
+
+SPEC REPOS:
+  trunk:
+    - BugfenderSDK
+    - XPointSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  location:
+    :path: ".symlinks/plugins/location/ios"
+  xpoint_sdk:
+    :path: ".symlinks/plugins/xpoint_sdk/ios"
+
+SPEC CHECKSUMS:
+  BugfenderSDK: 210724a09aa05c9f6cdaea17af0fbbc2527a654d
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  xpoint_sdk: d96e3b57b7b704bc93e8ba1d8bf4694716bd4f49
+  XPointSDK: 1b65984bffd9615034b4d41c51227d7d95c8d785
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.11.3
