@@ -249,7 +249,7 @@ extension SdkCheckResult {
 
   var errorsAsDictArray: [[String: Any]]? {
     self.errors?.map { error in
-      ["code": error.code, "description": error.description]
+      ["code": error.code, "description": error.description_]
     }
   }
 

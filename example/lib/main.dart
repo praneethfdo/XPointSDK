@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:xpoint_sdk/models/check_result.dart';
+import 'package:xpoint_sdk/models/status.dart';
 import 'package:xpoint_sdk/xpoint_sdk.dart';
 
 void main() {
@@ -191,10 +195,42 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
+  Stopwatch? stopwatch;
+
+  String? changeDiff;
+
+  void stopWatch(CheckResult checkResult) {
+    if (checkResult.status != Status.waiting) {
+      if (stopwatch != null && stopwatch!.isRunning) {
+        stopwatch!.stop();
+
+        Duration duration = stopwatch!.elapsed;
+
+        changeDiff = 'Changed status from ' +
+            this.checkResult!.status!.name.toUpperCase() +
+            ' to ' +
+            checkResult.status!.name.toUpperCase() +
+            ' in ' +
+            duration.inSeconds.toString() +
+            's';
+
+        stopwatch = null;
+      }
+    }
+
+    // Measure time to change from waiting to any other status
+    if (stopwatch == null && checkResult.status == Status.waiting) {
+      stopwatch = Stopwatch()..start();
+    }
+  }
+
   didCheckStatusChanged(CheckResult checkResult) {
+    stopWatch(checkResult);
+
     setState(() {
       this.checkResult = checkResult;
     });
+    if (checkResult.jwt != null && checkResult.jwt != "") log(checkResult.jwt!);
   }
 
   CheckResult? checkResult;
@@ -211,46 +247,66 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [for (String status in progress) Text(status)],
           ),
           if (checkResult != null)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Status - ${checkResult!.status.toString()}',
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w700),
-                ),
-                if (checkResult!.errors?.isNotEmpty ?? false)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text('Error',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500)),
-                      Text('Code - ${checkResult!.errors?.first.code}',
-                          style: const TextStyle()),
-                      Text(
-                          'Description - ${checkResult!.errors?.first.description}',
-                          style: const TextStyle()),
-                    ],
+            Expanded(
+              child: ListView(
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                if (checkResult!.jwt != null && checkResult!.jwt!.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text('JWT - ${checkResult!.jwt}',
-                          style: const TextStyle()),
-                    ],
+                  Text(
+                    'Status - ${checkResult!.status!.name.toUpperCase()}',
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.w700),
                   ),
-              ],
+                  if (changeDiff != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(changeDiff!),
+                    ),
+                  if (checkResult!.errors?.isNotEmpty ?? false)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('Error',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w500)),
+                        Text('Code - ${checkResult!.errors?.first.code}',
+                            style: const TextStyle()),
+                        Text(
+                            'Description - ${checkResult!.errors?.first.description}',
+                            style: const TextStyle()),
+                      ],
+                    ),
+                  if (checkResult!.jwt != null && checkResult!.jwt!.isNotEmpty)
+                    Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              await Clipboard.setData(
+                                  ClipboardData(text: checkResult!.jwt));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("JWT copied to clipboard")));
+                            },
+                            child: Text(
+                              'JWT - ${checkResult!.jwt}',
+                              style: const TextStyle(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             )
         ]),
       ),
