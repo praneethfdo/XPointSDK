@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'xpoint_sdk'
-  s.version          = '4.1.0'
+  s.version          = '4.1.2'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -23,6 +23,6 @@ A new flutter plugin project.
   s.swift_version = '5.0'
 
   s.preserve_paths = 'XPointSDK.xcframework'
-  s.  = 'XPointSDK.xcframework'
+  s.vendored_frameworks = 'XPointSDK.xcframework'
 
 end
