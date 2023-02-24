@@ -1,0 +1,6 @@
+framework module XPointSDK {
+    umbrella header "XPointSDK.h"
+
+    export *
+    module * { export * }
+}
