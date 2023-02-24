@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'xpoint_sdk'
-  s.version          = '0.0.1'
+  s.version          = '4.1.0'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -19,10 +19,10 @@ A new flutter plugin project.
   s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = {'OTHER_LDFLAGS' => '-framework XPointSDK', 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  s.pod_target_xcconfig = {'VALID_ARCHS' => 'arm64 x86_64', 'OTHER_LDFLAGS' => '-framework XPointSDK', 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
 
   s.preserve_paths = 'XPointSDK.xcframework'
-  s.vendored_frameworks = 'XPointSDK.xcframework'
+  s.  = 'XPointSDK.xcframework'
 
 end
